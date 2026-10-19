@@ -7,11 +7,12 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-console.log(" Загружен код с поштучной отправкой пушей!");
+console.log("🚀 Запуск сервера. Читаем ключ из файла...");
 
+// Читаем файл, созданный в Render
 const serviceAccount = JSON.parse(fs.readFileSync('/etc/secrets/service-account.json', 'utf8'));
 
-// Исправляем переносы строк в private_key
+// ГАРАНТИРОВАННО исправляем переносы строк, если Render их исказил
 if (serviceAccount.private_key) {
   serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n');
 }
@@ -29,9 +30,8 @@ app.post('/send-push', async (req, res) => {
     }
 
     let successCount = 0;
-    let errorCount = 0;
 
-    // Отправляем каждому токену отдельно
+    // Отправляем по одному, это надежнее
     for (const token of tokens) {
       try {
         const message = {
@@ -47,19 +47,17 @@ app.post('/send-push', async (req, res) => {
           token: token
         };
 
-        const response = await admin.messaging().send(message);
-        console.log(`✅ Пуш отправлен на токен: ${token.substring(0, 20)}...`);
+        await admin.messaging().send(message);
+        console.log(`✅ Успешно: ${token.substring(0, 20)}...`);
         successCount++;
       } catch (error) {
-        console.error(`❌ Ошибка для токена ${token.substring(0, 20)}...:`, error.message);
-        errorCount++;
+        console.error(`❌ Ошибка токена: ${error.message}`);
       }
     }
 
-    console.log(`✅ Итого: успешно ${successCount}, ошибок ${errorCount}`);
-    res.json({ success: true, count: successCount, errors: errorCount });
+    res.json({ success: true, count: successCount });
   } catch (error) {
-    console.error('❌ Критическая ошибка:', error);
+    console.error('❌ Критическая ошибка сервера:', error);
     res.status(500).json({ error: error.message });
   }
 });
