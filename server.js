@@ -1,12 +1,16 @@
 const express = require('express');
 const admin = require('firebase-admin');
 const cors = require('cors');
+const fs = require('fs');
+const path = require('path');
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 
-const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+// ✅ ИСПРАВЛЕНИЕ: Читаем ключ из файла вместо переменной окружения
+const serviceAccountPath = path.resolve('/etc/secrets/service-account.json');
+const serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, 'utf8'));
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
