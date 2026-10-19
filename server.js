@@ -7,10 +7,14 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// ЭТА СТРОКА ДОКАЖЕТ, ЧТО КОД ОБНОВИЛСЯ
-console.log("🚀🚀🚀 ЗАГРУЖЕН НОВЫЙ КОД С ЧТЕНИЕМ ФАЙЛА! 🚀🚀🚀");
+console.log(" ЗАГРУЖЕН КОД С ИСПРАВЛЕНИЕМ ПЕРЕНОСОВ СТРОК! 🚀");
 
 const serviceAccount = JSON.parse(fs.readFileSync('/etc/secrets/service-account.json', 'utf8'));
+
+// ИСПРАВЛЯЕМ \n НА РЕАЛЬНЫЕ ПЕРЕНОСЫ СТРОК
+if (serviceAccount.private_key) {
+  serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n');
+}
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
@@ -34,7 +38,7 @@ app.post('/send-push', async (req, res) => {
     console.log(`✅ Успешно: ${response.successCount}`);
     res.json({ success: true, count: response.successCount });
   } catch (error) {
-    console.error('❌ Ошибка отправки:', error);
+    console.error('❌ Ошибка:', error);
     res.status(500).json({ error: error.message });
   }
 });
