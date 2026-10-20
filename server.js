@@ -21,6 +21,15 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
 
+// Обработчик пинга (чтобы Render не засыпал)
+app.get('/', (req, res) => {
+  res.send('Taxi Push Server is running ✅');
+});
+
+app.get('/ping', (req, res) => {
+  res.send('pong');
+});
+
 app.post('/send-push', async (req, res) => {
   try {
     const { tokens, title, body, orderId } = req.body;
@@ -57,7 +66,7 @@ app.post('/send-push', async (req, res) => {
 
     res.json({ success: true, count: successCount });
   } catch (error) {
-    console.error('❌ Критическая ошибка сервера:', error);
+    console.error(' Критическая ошибка сервера:', error);
     res.status(500).json({ error: error.message });
   }
 });
