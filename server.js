@@ -71,16 +71,15 @@ app.post('/send-push', async (req, res) => {
   }
 });
 
-// 🆕 НОВЫЙ ENDPOINT: Проверка версии приложения для автообновления
+// 🆕 ENDPOINT: Проверка версии приложения для автообновления
 app.get('/check-update', (req, res) => {
-  // ⚠️ ИНСТРУКЦИЯ: Когда собираешь новую версию APK, меняй значения здесь:
-  const latestVersionName = "1.1";       // Видимая версия (например, "1.1")
-  const latestVersionCode = 2;           // Числовая версия (должна быть больше, чем в build.gradle)
+  const latestVersionName = "1.1";       // Видимая версия
+  const latestVersionCode = 2;           // Числовая версия (должна быть > чем в build.gradle приложения)
   
-  // Ссылка на APK. Пока ставим заглушку, позже заменим на реальную ссылку GitHub Release
-  const downloadUrl = "https://github.com/your-username/your-repo/releases/latest/download/app-release.apk";
+  // ✅ ТВОЯ ПРЯМАЯ ССЫЛКА НА APK С GITHUB
+  const downloadUrl = "https://github.com/ssssq1/taxi-app-releases/releases/download/v1.1/TRAVIO.apk";
   
-  const releaseNotes = "Исправлены ошибки, добавлена загрузка фото через Supabase.";
+  const releaseNotes = "Исправлены ошибки, добавлена загрузка фото через Supabase, настроено автообновление.";
 
   res.json({
     latestVersionName,
