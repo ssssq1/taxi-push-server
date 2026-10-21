@@ -73,8 +73,8 @@ app.post('/send-push', async (req, res) => {
 
 // 🆕 ENDPOINT: Проверка версии приложения для автообновления
 app.get('/check-update', (req, res) => {
-  const latestVersionName = "1.1";       // Видимая версия
-  const latestVersionCode = 2;           // Числовая версия (должна быть > чем в build.gradle приложения)
+  const latestVersionName = "1.1";       
+  const latestVersionCode = 2;           
   
   // ✅ ТВОЯ ПРЯМАЯ ССЫЛКА НА APK С GITHUB
   const downloadUrl = "https://github.com/ssssq1/taxi-app-releases/releases/download/v1.1/TRAVIO.apk";
@@ -86,7 +86,7 @@ app.get('/check-update', (req, res) => {
     latestVersionCode,
     downloadUrl,
     releaseNotes,
-    isMandatory: false // Если true, приложение не даст работать без обновления
+    isMandatory: false 
   });
 });
 
