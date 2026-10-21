@@ -71,5 +71,25 @@ app.post('/send-push', async (req, res) => {
   }
 });
 
+// 🆕 НОВЫЙ ENDPOINT: Проверка версии приложения для автообновления
+app.get('/check-update', (req, res) => {
+  // ⚠️ ИНСТРУКЦИЯ: Когда собираешь новую версию APK, меняй значения здесь:
+  const latestVersionName = "1.1";       // Видимая версия (например, "1.1")
+  const latestVersionCode = 2;           // Числовая версия (должна быть больше, чем в build.gradle)
+  
+  // Ссылка на APK. Пока ставим заглушку, позже заменим на реальную ссылку GitHub Release
+  const downloadUrl = "https://github.com/your-username/your-repo/releases/latest/download/app-release.apk";
+  
+  const releaseNotes = "Исправлены ошибки, добавлена загрузка фото через Supabase.";
+
+  res.json({
+    latestVersionName,
+    latestVersionCode,
+    downloadUrl,
+    releaseNotes,
+    isMandatory: false // Если true, приложение не даст работать без обновления
+  });
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
