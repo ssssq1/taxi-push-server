@@ -66,7 +66,7 @@ app.post('/send-push', async (req, res) => {
 
     res.json({ success: true, count: successCount });
   } catch (error) {
-    cosole.error(' Критическая ошибка сервера:', error);
+    console.error(' Критическая ошибка сервера:', error);
     res.status(500).json({ error: error.message });
   }
 });
